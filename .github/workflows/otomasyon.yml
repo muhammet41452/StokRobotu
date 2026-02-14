@@ -1,0 +1,60 @@
+name: Stok Robotu Otomasyonu
+
+on:
+  push:
+    branches: [ "main" ]  # Kod yükleyince çalışır
+  [cite_start]workflow_dispatch:      # Manuel butonla çalıştırma [cite: 188]
+
+# Raporu GitHub Pages'e yüklemek için izinler
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test-ve-rapor:
+    runs-on: ubuntu-latest
+    
+    # PDF'te belirtilen "Taşınabilir Laboratuvar" (Docker Image) [cite: 50, 193]
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.58.0-jammy
+      options: --user 1001
+
+    steps:
+      - name: Kodları Çek
+        uses: actions/checkout@v4
+
+      - name: Kütüphaneleri Yükle
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          # Docker imajında tarayıcılar hazırdır, tekrar 'playwright install' gerekmez.
+
+      - name: Robotu Çalıştır
+        run: |
+          # Pytest ile testi başlatır, sonuçları allure-results klasörüne yazar [cite: 204]
+          pytest tests/test_stok_ekle.py --alluredir=allure-results
+
+      - name: Raporu Oluştur (Allure)
+        uses: simple-elf/allure-report-action@master
+        [cite_start]if: always() # Hata olsa bile rapor üret [cite: 208]
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          subfolder: allure-report
+
+      - name: Raporu Yayınla
+        uses: actions/upload-pages-artifact@v3
+        if: always()
+        with:
+          path: allure-report
+
+  deploy:
+    name: Web Sitesini Yayınla
+    needs: test-ve-rapor
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub Pages'e Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
