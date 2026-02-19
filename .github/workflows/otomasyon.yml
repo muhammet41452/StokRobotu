@@ -50,6 +50,7 @@ jobs:
   deploy:
     name: Web Sitesini Yayınla
     needs: test-ve-rapor
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: GitHub Pages'e Deploy
