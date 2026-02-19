@@ -30,7 +30,7 @@ jobs:
 
       - name: Robotu Çalıştır
         run: |
-          pytest tests/test_stok_ekle.py --alluredir=allure-results
+          python -m pytest tests/test_stok_ekle.py --alluredir=allure-results
 
       - name: Raporu Oluştur
         uses: simple-elf/allure-report-action@master
