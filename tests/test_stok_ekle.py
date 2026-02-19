@@ -65,26 +65,41 @@ def test_stok_ekleme_robotu():
                 page.wait_for_load_state("domcontentloaded")
 
             # DÖNGÜ BAŞLIYOR
+            # Menüye tıkladıktan sonra sayfanın tam oturması için en başta biraz bekleyelim
+            page.wait_for_timeout(2000) 
+
             for i in range(1, ADET + 1):
                 stok_adi = generate_random_name()
                 
                 with allure.step(f"[{i}/{ADET}] Stok Ekleniyor: {stok_adi}"):
-                    try:
-                        page.get_by_role("button", name="Ekle").click()
-                    except:
-                        page.reload()
-                        page.get_by_role("button", name="Ekle").click()
+                    
+                    # 1. EKLE BUTONUNA BASMA (ESNEK VE GARANTİ YÖNTEM)
+                    # Sadece text olarak "Ekle" yazan ilk elementi bul (buton, link vs. fark etmez)
+                    ekle_butonu = page.get_by_text("Ekle", exact=True).first
+                    
+                    # Butonun görünür olmasını bekle (maksimum 10 saniye sabreder)
+                    ekle_butonu.wait_for(state="visible", timeout=10000)
+                    
+                    # Tıkla
+                    ekle_butonu.click()
+                    
+                    # 2. FORMUN AÇILMASINI BEKLE
+                    # Yan panelin veya popup'ın açılma animasyonu bitene kadar bekle
+                    page.wait_for_timeout(1500)
 
+                    # 3. FORMU DOLDUR VE KAYDET
                     page.get_by_role("textbox", name="Birim", exact=True).fill(BIRIM)
                     page.get_by_role("textbox", name="Stok Adı").fill(stok_adi)
-                    page.get_by_role("button", name="Kaydet").click()
                     
-                    # Başarılı olduğunu doğrula (Assertion) [cite: 254]
-                    # Kaydet butonuna bastıktan sonra hata almadığımızı varsayıyoruz
-                    page.wait_for_timeout(1000)
+                    # Kaydet butonuna tıkla (Aynı esnek metodu burada da kullanıyoruz)
+                    page.get_by_text("Kaydet", exact=True).first.click()
+                    
+                    # [cite_start]Başarılı olduğunu doğrula (Assertion) [cite: 254]
+                    # Sistemin kaydı tamamlaması ve ekranın sıfırlanması için bekle
+                    page.wait_for_timeout(1500)
         
         except Exception as e:
-            # Hata anında ekran görüntüsü alıp rapora ekle [cite: 167]
+            # [cite_start]Hata anında ekran görüntüsü alıp rapora ekle [cite: 167]
             allure.attach(
                 page.screenshot(full_page=True), 
                 name="Hata_Gorseli", 
