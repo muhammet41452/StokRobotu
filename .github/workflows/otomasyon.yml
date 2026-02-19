@@ -2,10 +2,10 @@ name: Stok Robotu Otomasyonu
 
 on:
   push:
-    branches: [ "main" ]  # Kod yükleyince çalışır
-  [cite_start]workflow_dispatch:      # Manuel butonla çalıştırma [cite: 188]
+    branches:
+      - main
+  workflow_dispatch:
 
-# Raporu GitHub Pages'e yüklemek için izinler
 permissions:
   contents: read
   pages: write
@@ -15,7 +15,6 @@ jobs:
   test-ve-rapor:
     runs-on: ubuntu-latest
     
-    # PDF'te belirtilen "Taşınabilir Laboratuvar" (Docker Image) [cite: 50, 193]
     container:
       image: mcr.microsoft.com/playwright/python:v1.58.0-jammy
       options: --user 1001
@@ -28,16 +27,14 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          # Docker imajında tarayıcılar hazırdır, tekrar 'playwright install' gerekmez.
 
       - name: Robotu Çalıştır
         run: |
-          # Pytest ile testi başlatır, sonuçları allure-results klasörüne yazar [cite: 204]
           pytest tests/test_stok_ekle.py --alluredir=allure-results
 
-      - name: Raporu Oluştur (Allure)
+      - name: Raporu Oluştur
         uses: simple-elf/allure-report-action@master
-        [cite_start]if: always() # Hata olsa bile rapor üret [cite: 208]
+        if: always()
         with:
           allure_results: allure-results
           gh_pages: gh-pages
