@@ -92,7 +92,7 @@ def test_stok_ekleme_robotu():
                     page.get_by_role("textbox", name="Stok Adı").fill(stok_adi)
                     
                     # Kaydet butonuna tıkla (Aynı esnek metodu burada da kullanıyoruz)
-                    page.get_by_text("Kaydet", exact=True).first.click()
+                    page.get_by_role("button", name="Kaydet").click()
                     
                     # [cite_start]Başarılı olduğunu doğrula (Assertion) [cite: 254]
                     # Sistemin kaydı tamamlaması ve ekranın sıfırlanması için bekle
