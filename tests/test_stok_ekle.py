@@ -3,11 +3,11 @@ from playwright.sync_api import sync_playwright, expect
 import random
 import string
 import allure  # Raporlama için
-
+import os
 # --- AYARLAR ---
-REAL_EMAIL = "destekk@cevizsoft.com"
-REAL_PASS = "Aa1"
-REAL_FIRM_CODE = "s5snb53qz5Z2XvpS5htK"
+REAL_EMAIL = os.environ.get("USER_EMAIL")
+REAL_PASS = os.environ.get("USER_PASS")
+REAL_FIRM_CODE = os.environ.get("FIRM_CODE")
 BIRIM = "adet"
 TARGET_URL = "https://rc.tcaree.com/"
 ADET = 1  # Her çalıştırmada kaç stok eklensin?
