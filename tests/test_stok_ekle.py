@@ -10,7 +10,7 @@ REAL_PASS = "Aa1"
 REAL_FIRM_CODE = "s5snb53qz5Z2XvpS5htK"
 BIRIM = "adet"
 TARGET_URL = "https://rc.tcaree.com/"
-ADET = 5  # Her çalıştırmada kaç stok eklensin?
+ADET = 1  # Her çalıştırmada kaç stok eklensin?
 
 def generate_random_name(prefix="OtoStok_"):
     chars = string.ascii_letters + string.digits
