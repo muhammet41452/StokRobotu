@@ -5,6 +5,12 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs: # BURASI EKLENDİ (Kullanıcıya soru sormak için)
+      kac_adet:
+        description: 'Kaç adet stok eklenecek?'
+        required: true
+        default: '5'
+        type: string
 
 permissions:
   contents: read
@@ -33,6 +39,7 @@ jobs:
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASS: ${{ secrets.USER_PASS }}
           FIRM_CODE: ${{ secrets.FIRM_CODE }}
+          STOK_ADEDI: ${{ inputs.kac_adet }}
         run: |
           python -m pytest tests/test_stok_ekle.py --alluredir=allure-results
 
