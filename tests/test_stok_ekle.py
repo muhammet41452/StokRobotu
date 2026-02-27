@@ -10,7 +10,7 @@ REAL_PASS = os.environ.get("USER_PASS")
 REAL_FIRM_CODE = os.environ.get("FIRM_CODE")
 BIRIM = "adet"
 TARGET_URL = "https://rc.tcaree.com/"
-ADET = 1  # Her çalıştırmada kaç stok eklensin?
+ADET = int(os.environ.get("STOK_ADEDI", 1))
 
 def generate_random_name(prefix="OtoStok_"):
     chars = string.ascii_letters + string.digits
