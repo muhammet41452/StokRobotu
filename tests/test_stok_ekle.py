@@ -67,7 +67,7 @@ def test_stok_ekleme_robotu():
 
             # DÖNGÜ BAŞLIYOR
             # Menüye tıkladıktan sonra sayfanın tam oturması için en başta biraz bekleyelim
-            page.wait_for_timeout(2000) 
+            page.wait_for_timeout(3000) 
 
             for i in range(1, ADET + 1):
                 stok_adi = generate_random_name()
