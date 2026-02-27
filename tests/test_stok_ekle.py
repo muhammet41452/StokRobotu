@@ -10,7 +10,8 @@ REAL_PASS = os.environ.get("USER_PASS")
 REAL_FIRM_CODE = os.environ.get("FIRM_CODE")
 BIRIM = "adet"
 TARGET_URL = "https://rc.tcaree.com/"
-ADET = int(os.environ.get("STOK_ADEDI", 1))
+gelen_sayi = os.environ.get("STOK_ADEDI", "").strip()
+ADET = int(gelen_sayi) if gelen_sayi else 1
 
 def generate_random_name(prefix="OtoStok_"):
     chars = string.ascii_letters + string.digits
